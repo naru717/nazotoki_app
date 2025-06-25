@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>とうせい謎解き部屋</title>
+  <style>
+    body {
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      background: #fffbe6;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      color: #333;
+    }
+    .container {
+      max-width: 500px;
+      margin: 2em auto;
+      padding: 2em;
+      background-color: #ffffffd9;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    input {
+      display: block;
+      width: 90%;
+      padding: 10px;
+      margin: 10px auto;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1em;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #f48fb1;
+      color: white;
+      padding: 12px 24px;
+      margin: 10px auto;
+      border: none;
+      border-radius: 20px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: inline-block;
+    }
+    button:hover {
+      background-color: #ec407a;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    .hidden { display: none; }
+    .character {
+      width: 100px;
+      margin-bottom: 1em;
+    }
+    .intro-image {
+      max-width: 70%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      margin: 16px 0;
+    }
+    .feedback {
+      font-weight: bold;
+      margin-top: 12px;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="welcome-screen">
+    <img src="detective_mame_nurse.png" class="character" alt="とせいくん" />
+    <h1>🔍 謎解きの部屋へようこそ！</h1>
+    <p>ぼくは<strong>とせいくん</strong>。謎解きナビゲーターだよ！</p>
+    <p>あなたの情報を入力してスタートしよう！</p>
+    <input type="text" id="userName" placeholder="名前（フルネーム）">
+    <input type="text" id="userDepartment" placeholder="所属（例：8E病棟）">
+    <input type="text" id="userProfession" placeholder="職種（例：看護師）">
+    <button onclick="startApp()">スタート！</button>
+  </div>
+
+  <div class="container hidden" id="intro">
+    <h2>チャプター1：専門・認定看護師の謎</h2>
+    <img src="ninnteikanngosi.png" class="intro-image" alt="専門・認定看護師の謎" />
+    <p>とうせい病院に現れた“謎の看護師”。胸には見慣れぬバッジが…。<br>
+    「なぜか安心する」「説明が的確」…その秘密を解き明かそう！</p>
+    <button onclick="goToQuestion(1)">調査開始！</button>
+  </div>
+
+  <div class="container hidden" id="q1">
+    <h2>第1問</h2>
+    <img src="detective_mame_nurse.png" class="character" alt="とせいくん" />
+    <p><strong>とせい：</strong> このバッジ…何を意味してるんだろう？</p>
+    <p><strong>専門・認定看護師とは？</strong></p>
+    <button onclick="checkAnswer(this, false, 'q1')">A. 医師の代わりに診察する</button>
+    <button onclick="checkAnswer(this, true, 'q1')">B. 特定分野の高度な知識と技術をもつ看護師</button>
+    <button onclick="checkAnswer(this, false, 'q1')">C. 海外の看護資格を持っている</button>
+    <p id="feedback-q1" class="feedback"></p>
+    <button id="next-q1" class="hidden" onclick="goToQuestion(2)">▶️ 次へ</button>
+  </div>
+
+  <div class="container hidden" id="q2">
+    <h2>第2問</h2>
+    <img src="detective_mame_nurse.png" class="character" alt="とせいくん" />
+    <p><strong>とせい：</strong> 活躍の場を探ってみよう！</p>
+    <p><strong>認定看護師の役割は？</strong></p>
+    <button onclick="checkAnswer(this, false, 'q2')">A. 手術の執刀をする</button>
+    <button onclick="checkAnswer(this, true, 'q2')">B. チーム医療と連携してケアを高める</button>
+    <button onclick="checkAnswer(this, false, 'q2')">C. 黙々と1人で行動する</button>
+    <p id="feedback-q2" class="feedback"></p>
+    <button id="next-q2" class="hidden" onclick="goToQuestion(3)">▶️ 次へ</button>
+  </div>
+
+  <div class="container hidden" id="q3">
+    <h2>第3問</h2>
+    <img src="detective_mame_nurse.png" class="character" alt="とせいくん" />
+    <p><strong>とせい：</strong> 専門看護師は何が違うのかな？</p>
+    <p><strong>専門看護師の特徴は？</strong></p>
+    <button onclick="checkAnswer(this, true, 'q3')">A. 倫理や調整も行う横断的な看護師</button>
+    <button onclick="checkAnswer(this, false, 'q3')">B. 病棟だけの担当</button>
+    <button onclick="checkAnswer(this, false, 'q3')">C. 単一の技術だけを専門とする</button>
+    <p id="feedback-q3" class="feedback"></p>
+    <button id="next-q3" class="hidden" onclick="goToQuestion(4)">▶️ 次へ</button>
+  </div>
+
+  <div class="container hidden" id="q4">
+    <h2>第4問</h2>
+    <img src="detective_mame_nurse.png" class="character" alt="とせいくん" />
+    <p><strong>とせい：</strong> 何を相談できるのか知っておこう！</p>
+    <p><strong>専門・認定看護師に相談できる内容は？</strong></p>
+    <button onclick="checkAnswer(this, true, 'q4')">A. ケアの相談・連携・倫理的判断</button>
+    <button onclick="checkAnswer(this, false, 'q4')">B. 診察や処方の依頼</button>
+    <button onclick="checkAnswer(this, false, 'q4')">C. 医療機器の操作指導のみ</button>
+    <p id="feedback-q4" class="feedback"></p>
+    <button id="next-q4" class="hidden" onclick="goToQuestion(5)">▶️ 次へ</button>
+  </div>
+
+  <div class="container hidden" id="q5">
+    <h2>第5問</h2>
+    <img src="detective_mame_nurse.png" class="character" alt="とせいくん" />
+    <p><strong>とせい：</strong> とうせい病院での相談体制って？</p>
+    <p><strong>とうせい病院での相談体制は？</strong></p>
+    <button onclick="checkAnswer(this, true, 'q5')">A. PHS6693で相談できる体制がある</button>
+    <button onclick="checkAnswer(this, false, 'q5')">B. 専門看護師は院外にしかいない</button>
+    <button onclick="checkAnswer(this, false, 'q5')">C. 面談予約が数ヶ月必要</button>
+    <p id="feedback-q5" class="feedback"></p>
+    <button id="next-q5" class="hidden" onclick="showSummary()">🎉 まとめへ</button>
+  </div>
+
+  <div class="container hidden" id="summary">
+    <h2>🎉 謎が解けた！</h2>
+    <img src="nazokoki.png" class="intro-image" alt="謎解き成功" />
+    <p>📝 専門・認定看護師の謎解き：</p>
+    <ul style="text-align: left;">
+      <li>専門・認定看護師は <u>分野に特化した看護のプロフェッショナル</u></li>
+      <li>認定看護師は <u>チーム連携・実践・指導・相談の要</u></li>
+      <li>専門看護師は <u>倫理・研究・調整を担う高い実践者</u></li>
+      <li>相談できる内容は <u>ケア・連携・倫理など幅広い</u></li>
+      <li><strong>とうせい病院では「PHS6693」でいつでも相談できます！</strong></li>
+    </ul>
+    <p>✨ あなたの学びが、きっと誰かの力になります。</p>
+  </div>
+
+  <script>
+    function startApp() {
+      const name = document.getElementById("userName").value;
+      const dept = document.getElementById("userDepartment").value;
+      const job = document.getElementById("userProfession").value;
+      if (!name || !dept || !job) {
+        alert("すべて入力してください");
+        return;
+      }
+      document.getElementById("welcome-screen").classList.add("hidden");
+      document.getElementById("intro").classList.remove("hidden");
+    }
+
+    function goToQuestion(num) {
+      for (let i = 1; i <= 5; i++) {
+        document.getElementById("q" + i)?.classList.add("hidden");
+      }
+      document.getElementById("intro")?.classList.add("hidden");
+      document.getElementById("q" + num).classList.remove("hidden");
+    }
+
+    function checkAnswer(button, isCorrect, questionId) {
+      const fb = document.getElementById(`feedback-${questionId}`);
+      const explanations = {
+        q1: isCorrect
+          ? "専門・認定看護師は特定分野に特化した看護のプロです。"
+          : "医師の代わりではなく、看護の高度な役割を担っています。",
+        q2: isCorrect
+          ? "認定看護師はチーム連携の要となり、ケアを実践・指導・相談します。"
+          : "手術や単独行動ではなく、連携がポイントです。",
+        q3: isCorrect
+          ? "専門看護師は、調整や倫理判断もできる横断的な存在です。"
+          : "病棟や単一スキルに限られません。",
+        q4: isCorrect
+          ? "ケア、連携、倫理の相談ができる頼れる存在です。"
+          : "診察や処方は医師の役割です。連携面を重視しましょう。",
+        q5: isCorrect
+          ? "とうせい病院では「PHS6693」で専門・認定看護師にすぐ相談できます！"
+          : "院内にも頼れる看護師がいます。相談体制を活用しましょう。"
+      };
+      fb.textContent = (isCorrect ? "✅ 正解！ " : "❌ 惜しい！ ") + explanations[questionId];
+      fb.style.color = isCorrect ? "green" : "red";
+      if (isCorrect) {
+        document.getElementById("next-" + questionId).classList.remove("hidden");
+      }
+    }
+
+    function showSummary() {
+      for (let i = 1; i <= 5; i++) {
+        document.getElementById("q" + i).classList.add("hidden");
+      }
+      document.getElementById("summary").classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>

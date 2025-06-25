@@ -1,0 +1,128 @@
+/* ベースの設定 */
+body {
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  background: #fffbe6;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: #333;
+}
+
+/* コンテンツの中央寄せ */
+.container {
+  max-width: 500px;
+  margin: 2em auto;
+  padding: 2em;
+  background-color: #ffffffd9;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 入力欄デザイン */
+input {
+  display: block;
+  width: 90%;
+  padding: 10px;
+  margin: 10px auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+/* ボタン基本スタイル */
+button {
+  background-color: #f48fb1;
+  color: white;
+  padding: 12px 24px;
+  margin: 10px auto;
+  border: none;
+  border-radius: 20px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+}
+
+button:hover {
+  background-color: #ec407a;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* 非表示クラス */
+.hidden {
+  display: none;
+}
+
+/* キャラクター画像 */
+.character {
+  width: 100px;
+  margin-bottom: 1em;
+}
+
+/* 導入イメージ画像 */
+.intro-image {
+  max-width: 70%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  margin: 16px 0;
+}
+
+/* 解説ボックス（未使用だが今後のため保持） */
+.detail-box {
+  background-color: #eef6ff;
+  border-left: 6px solid #4a90e2;
+  padding: 12px;
+  margin-top: 16px;
+  font-size: 0.95em;
+  text-align: left;
+  border-radius: 8px;
+  line-height: 1.6;
+  display: inline-block;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* フィードバックメッセージ強調（正解・不正解） */
+#feedback-q1, #feedback-q2, #feedback-q3 {
+  font-weight: bold;
+  margin-top: 12px;
+  font-size: 1.1em;
+}
+
+/* 「▶️ 次へ」ボタン用 */
+#toQ2Button,
+#toQ3Button,
+#toSummaryButton {
+  margin-top: 20px;
+}
+
+/* ボタンが複数並ぶときの余白調整 */
+button + button {
+  margin-top: 12px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 600px) {
+  .container {
+    padding: 1.2em;
+  }
+
+  button {
+    width: 90%;
+    font-size: 1em;
+  }
+
+  input {
+    width: 95%;
+  }
+
+  .intro-image {
+    max-width: 90%; /* スマホでは大きめに見せる */
+  }
+}
