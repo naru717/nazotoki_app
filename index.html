@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>とうせい謎解き部屋</title>
+  <style>
+    body {
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      background: linear-gradient(to bottom, #fffbe6, #ffe0ec);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      color: #333;
+    }
+    .container {
+      max-width: 500px;
+      margin: 2em auto;
+      padding: 2em;
+      background-color: #ffffffd9;
+      border-radius: 20px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+    input, button {
+      display: block;
+      width: 90%;
+      padding: 10px;
+      margin: 10px auto;
+      font-size: 1em;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+    input {
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #f48fb1;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #ec407a;
+    }
+    .hidden {
+      display: none;
+    }
+    .character {
+      width: 120px;
+      margin-bottom: 1em;
+      animation: bounce 1.5s infinite;
+    }
+    .intro-image {
+      max-width: 70%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      margin: 16px 0;
+    }
+    .feedback {
+      font-weight: bold;
+      margin-top: 12px;
+      font-size: 1.1em;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    #toseikun-comment {
+      max-width: 500px;
+      margin: 2em auto;
+    }
+    #toseikun-box {
+      position: relative;
+      background: #fff;
+      border: 2px solid #f48fb1;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: left;
+      font-size: 0.95em;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      padding-bottom: 80px;
+    }
+    #toseikun-img {
+      width: 110px;
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<audio id="pochiSound" src="pochi.mp3" preload="auto"></audio>
+<audio id="bgm" src="nazotoki.mp3" preload="auto" loop></audio>
+
+<div class="container" id="title-screen">
+  <img src="detective_mame_nurse.png" class="character" alt="とせいくん" />
+  <h1 style="font-size: 2em; color: #d81b60;">ようこそ！とうせい謎解き部屋へ</h1>
+  <p>ナース探偵・とせいくんと一緒に、<br>秘密を解き明かそう！</p>
+  <button onclick="playPochi(); goTo('welcome-screen')">スタート</button>
+</div>
+
+<div class="container hidden" id="welcome-screen">
+  <img src="detective_mame_nurse.png" class="character" alt="とせいくん" />
+  <h2>🔐 情報を入力しよう</h2>
+  <input type="text" id="userName" placeholder="名前（フルネーム）">
+  <input type="text" id="userDepartment" placeholder="所属（例：8E病棟）">
+  <input type="text" id="userProfession" placeholder="職種（例：看護師）">
+  <button onclick="playPochi(); startIntro()">謎解き部屋へ入る</button>
+</div>
+
+<div class="container hidden" id="intro">
+  <h2>チャプター1：専門・認定看護師の謎</h2>
+  <img src="ninnteikanngosi.png" class="intro-image" alt="専門・認定看護師の謎" />
+  <p>とうせい病院に現れた“謎の看護師”。胸には見慣れぬバッジが…。<br>
+  「専門・認定看護師」と言うらしい…その秘密を解き明かそう！</p>
+  <button onclick="playPochi(); goTo('q1')">調査開始！</button>
+</div>
+
+<!-- ✅ とせいくん 吹き出し -->
+<div id="toseikun-comment" class="hidden">
+  <div id="toseikun-box">
+    <p id="toseikun-text"></p>
+    <img src="detective_mame_nurse.png" alt="とせいくん" id="toseikun-img" />
+  </div>
+</div>
+
+<!-- ✅ 調査1 -->
+<div class="container hidden" id="q1">
+  <h2>調査1：専門看護師の役割</h2>
+  <p>専門看護師の主な活動はどれ？</p>
+  <button onclick="playPochi(); nextWithAnswer(6, 'q1')">臨床実践・相談・調整・倫理調整など</button>
+  <button onclick="playPochi(); nextWithAnswer(0, 'q1')">医師の代わりに患者対応する</button>
+  <button onclick="playPochi(); nextWithAnswer(0, 'q1')">訪問看護のみを行う</button>
+  <button class="next-btn hidden" onclick="playPochi(); goToNext('q1')">▶️ 次へ</button>
+</div>
+
+<!-- ✅ 調査2 -->
+<div class="container hidden" id="q2">
+  <h2>調査2：認定看護師の役割</h2>
+  <p>次のうち、認定看護師の役割はどれ？</p>
+  <button onclick="playPochi(); nextWithAnswer(6, 'q2')">がんの苦痛緩和、褥瘡の予防、感染管理など</button>
+  <button onclick="playPochi(); nextWithAnswer(0, 'q2')">病棟の人間関係の悩み</button>
+  <button onclick="playPochi(); nextWithAnswer(0, 'q2')">給与や人事異動の相談</button>
+  <button class="next-btn hidden" onclick="playPochi(); goToNext('q2')">▶️ 次へ</button>
+</div>
+
+<!-- ✅ 調査3 -->
+<div class="container hidden" id="q3">
+  <h2>調査3：専門・認定看護師はどんな存在？</h2>
+  <p>現場スタッフにとって、どのような存在として最も活用できる？</p>
+  <button onclick="playPochi(); nextWithAnswer(9, 'q3')">困難なケアや判断に悩んだとき、相談・同行して一緒に考えてくれる</button>
+  <button onclick="playPochi(); nextWithAnswer(0, 'q3')">医師の代わりに患者対応してくれる人</button>
+  <button onclick="playPochi(); nextWithAnswer(0, 'q3')">指導だけしてくれる教育専門の人</button>
+  <button class="next-btn hidden" onclick="playPochi(); goToNext('q3')">▶️ 次へ</button>
+</div>
+
+<!-- ✅ 調査4 -->
+<div class="container hidden" id="q4">
+  <h2>調査4：専門・認定看護師から学ぶには？</h2>
+  <p>日々の業務に活かすために大切なことは？</p>
+  <button onclick="playPochi(); nextWithAnswer(3, 'q4')">関心を持ち、カンファやケアで積極的に関わる</button>
+  <button onclick="playPochi(); nextWithAnswer(0, 'q4')">認定看護師に任せて、自分は関わらない</button>
+  <button onclick="playPochi(); nextWithAnswer(0, 'q4')">困ったときにしか関わらないようにする</button>
+  <button class="next-btn hidden" onclick="playPochi(); goToNext('q4')">▶️ 最終問題へ</button>
+</div>
+
+<!-- ✅ 暗号入力 -->
+<div class="container hidden" id="q5">
+  <h2>調査5：最終暗号を入力せよ！</h2>
+  <p>今までの暗号数字を順に入力して、謎を解き明かそう！</p>
+  <input type="text" id="finalCode" placeholder="例：6693">
+  <button onclick="playPochi(); checkCode()">答え合わせ</button>
+  <p id="finalFeedback" class="feedback"></p>
+</div>
+
+<!-- ✅ クリア画面 -->
+<div class="container hidden" id="clear">
+  <h2>🎉 謎が解けた！</h2>
+  <img src="nazokoki.png" class="intro-image" alt="謎解き成功" />
+  <p>よくぞ暗号を解き明かした…</p>
+  <p><strong>あなたは立派な『ナース探偵』です！</strong></p>
+  <p style="margin-top: 1.5em;">
+    📞 <strong>PHS「6693」</strong> に電話すれば、<br>
+    専門・認定看護師があなたの相談に応じてくれます。
+  </p>
+  <p style="font-weight: bold; color: #d81b60;">
+    どんな些細なことでも気軽に連絡してみてくださいね！
+  </p>
+  <button onclick="playPochi(); goTo('promotion')">📣 次のイベントを見る</button>
+</div>
+
+<!-- ✅ 宣伝画面 -->
+<div class="container hidden" id="promotion">
+  <h2>🧠 Tosei Medical Cup 開催！</h2>
+  <p>12月開催予定！</p>
+  <p>数多くの謎があなたを待ち受ける…</p>
+  <p><strong>君の推理力を、試してみないか？</strong></p>
+</div>
+
+<script>
+  let collectedDigits = [];
+
+  function playPochi() {
+    const sound = document.getElementById("pochiSound");
+    if (sound) {
+      sound.currentTime = 0;
+      sound.play().catch(e => console.warn("効果音の再生に失敗しました", e));
+    }
+  }
+
+  function hideToseikunMessage() {
+    const commentBox = document.getElementById("toseikun-comment");
+    commentBox.classList.add("hidden");
+    document.getElementById("toseikun-text").innerHTML = "";
+  }
+
+  function startIntro() {
+    const name = document.getElementById("userName").value;
+    const dept = document.getElementById("userDepartment").value;
+    const job = document.getElementById("userProfession").value;
+    if (!name || !dept || !job) {
+      alert("すべて入力してください");
+      return;
+    }
+    goTo("intro");
+
+    const bgm = document.getElementById("bgm");
+    if (bgm.paused) {
+      bgm.currentTime = 0;
+      bgm.play().catch(e => console.warn("BGM再生失敗", e));
+    }
+  }
+
+  function goTo(id) {
+    document.querySelectorAll('.container').forEach(div => div.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+    hideToseikunMessage();
+  }
+
+  function goToNext(currentId) {
+    const nextId = 'q' + (parseInt(currentId.replace('q', '')) + 1);
+    goTo(nextId);
+  }
+
+  function showToseikunMessage(message) {
+    const commentBox = document.getElementById("toseikun-comment");
+    const commentText = document.getElementById("toseikun-text");
+    commentText.innerHTML = message;
+    commentBox.classList.remove("hidden");
+  }
+
+  function nextWithAnswer(digit, questionId) {
+    const feedback = document.createElement("p");
+    feedback.className = "feedback";
+    if (digit > 0) {
+      collectedDigits.push(digit);
+      feedback.innerHTML = `✅ 正解！この調査の暗号は「<strong>${digit}</strong>」だよ。最後に使うから覚えておこう！`;
+      feedback.style.color = "green";
+
+      if (questionId === 'q1') {
+        showToseikunMessage(`正解！<br>そうなんだ、専門看護師には以下の役割があるんだよ。<br><br>
+        🛠 <strong>専門看護師の6つの役割</strong><br>
+        ① 臨床実践…高度な看護ケアを提供<br>
+        ② 相談支援…看護師や多職種の相談役<br>
+        ③ 調整…チーム医療の連携を調整<br>
+        ④ 倫理調整…治療方針などの難しい判断に関与<br>
+        ⑤ 教育…スタッフ指導・勉強会の企画など<br>
+        ⑥ 研究…看護の質向上のための実践研究<br>
+        これだけのことを学んでいるんだって。`);
+      } else if (questionId === 'q2') {
+        showToseikunMessage(`正解！<br>そうなんだ。認定看護師は…<br><br>
+        🔹 特定の看護分野で「実践力」を高めたスペシャリスト<br>
+        🔹 認定教育課程を修了し、試験に合格して認定されるんだ<br>
+        🔹 現場で即戦力として「看護の質向上」を支える存在だよ<br>
+        相談してみたいね`);
+      } else if (questionId === 'q3') {
+        showToseikunMessage(`正解！<br>そうなんだ、専門・認定看護師には<br>
+        ・ケア方法に不安があるとき<br>
+        ・新人指導に迷うとき<br>
+        ・ご家族への説明が難しいとき<br>
+        など、いつでも相談できるんだ`);
+      } else if (questionId === 'q4') {
+        showToseikunMessage(`正解！<br>関心を持って関わることで、ケアもチームもより良くなるよ。<br><br>
+        🧠 「学びたい姿勢」が信頼につながる！<br>
+        まずは一声「教えて」から始めよう`);
+      }
+    } else {
+      feedback.innerHTML = `❌ ちょっと違うけど、次の調査もがんばって！`;
+      feedback.style.color = "#d84315";
+    }
+
+    const current = document.querySelector('.container:not(.hidden)');
+    current.appendChild(feedback);
+    const nextBtn = current.querySelector('.next-btn');
+    if (nextBtn) nextBtn.classList.remove('hidden');
+  }
+
+  function checkCode() {
+    const code = document.getElementById("finalCode").value;
+    const feedback = document.getElementById("finalFeedback");
+    if (code === collectedDigits.join('')) {
+      feedback.textContent = "✅ 正解！";
+      feedback.style.color = "green";
+      setTimeout(() => goTo("clear"), 1000);
+    } else {
+      feedback.textContent = "❌ 暗号が違うようだ…もう一度挑戦してみよう！";
+      feedback.style.color = "red";
+    }
+  }
+</script>
+
+</body>
+</html>
