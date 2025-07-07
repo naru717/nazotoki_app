@@ -1,68 +1,94 @@
 <script>
-  function goToTitle() {
-    document.getElementById("welcome-screen").classList.add("hidden");
-    document.getElementById("title-screen").classList.remove("hidden");
-  }
+  let collectedDigits = [];
 
-  function goToIntro() {
-    document.getElementById("title-screen").classList.add("hidden");
-    document.getElementById("chapter1-intro").classList.remove("hidden");
-  }
-
-  function goToChapter(number) {
-    if (number === 1) {
-      document.getElementById("chapter1-intro").classList.add("hidden");
-      document.getElementById("chapter1-q1").classList.remove("hidden");
+  function playPochi() {
+    const sound = document.getElementById("pochiSound");
+    if (sound) {
+      sound.currentTime = 0;
+      sound.play().catch(e => console.warn("効果音の再生に失敗しました", e));
     }
   }
 
-  function goToQuestion(num) {
-    if (num === 2) {
-      document.getElementById("chapter1-q1").classList.add("hidden");
-      document.getElementById("chapter1-q2").classList.remove("hidden");
-    } else if (num === 3) {
-      document.getElementById("chapter1-q2").classList.add("hidden");
-      document.getElementById("chapter1-q3").classList.remove("hidden");
+  // ✅ 追加：吹き出しを非表示にする関数
+  function hideToseikunMessage() {
+    const commentBox = document.getElementById("toseikun-comment");
+    commentBox.classList.add("hidden");
+    document.getElementById("toseikun-text").innerHTML = "";
+  }
+
+  function startIntro() {
+    const name = document.getElementById("userName").value;
+    const dept = document.getElementById("userDepartment").value;
+    const job = document.getElementById("userProfession").value;
+    if (!name || !dept || !job) {
+      alert("すべて入力してください");
+      return;
+    }
+    goTo("intro");
+    const bgm = document.getElementById("bgm");
+    if (bgm.paused) {
+      bgm.currentTime = 0;
+      bgm.play().catch(e => console.warn("BGM再生失敗", e));
     }
   }
 
-  function goToSummary() {
-    document.getElementById("chapter1-q3").classList.add("hidden");
-    document.getElementById("chapter1-summary").classList.remove("hidden");
+  // ✅ 修正：画面切り替え時に吹き出しリセット
+  function goTo(id) {
+    document.querySelectorAll('.container').forEach(div => div.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+    hideToseikunMessage(); // ✅ 毎回非表示にする
   }
 
-  function checkAnswer(button, isCorrect, questionId) {
-    const feedback = document.getElementById(`feedback-${questionId}`);
-    let message = "";
-    let color = "";
+  function goToNext(currentId) {
+    const nextId = 'q' + (parseInt(currentId.replace('q', '')) + 1);
+    goTo(nextId);
+  }
 
-    if (isCorrect) {
-      color = "green";
+  function showToseikunMessage(message) {
+    const commentBox = document.getElementById("toseikun-comment");
+    const commentText = document.getElementById("toseikun-text");
+    commentText.innerHTML = message;
+    commentBox.classList.remove("hidden");
+  }
 
-      if (questionId === "q1") {
-        message = "✅ 正解です！よく知っていますね✨ 褥瘡は、持続的な圧迫やずれによって皮膚やその下の組織が損傷する状態です。";
-        document.getElementById("toQ2Button").classList.remove("hidden");
-      } else if (questionId === "q2") {
-        message = "✅ すばらしい！正解です🌟 ブレーデンスケールは、褥瘡のリスクを評価するために使われる信頼性の高いスケールです。";
-        document.getElementById("toQ3Button").classList.remove("hidden");
-      } else if (questionId === "q3") {
-        message = "✅ パーフェクト！体位変換などで圧を分散させることが、褥瘡予防の基本です！";
-        document.getElementById("toSummaryButton").classList.remove("hidden");
+  function nextWithAnswer(digit, questionId) {
+    const feedback = document.createElement("p");
+    feedback.className = "feedback";
+    if (digit > 0) {
+      collectedDigits.push(digit);
+      feedback.innerHTML = `✅ 正解！この調査の暗号は「<strong>${digit}</strong>」だよ。最後に使うから覚えておこう！`;
+      feedback.style.color = "green";
+
+      if (questionId === 'q1') {
+        showToseikunMessage(`正解！<br>そうなんだ、専門看護師には以下の役割があるんだよ。<br><br>
+        🛠 <strong>専門看護師の6つの役割</strong><br>
+        ① 臨床実践…高度な看護ケアを提供<br>
+        ② 相談支援…看護師や多職種の相談役<br>
+        ③ 調整…チーム医療の連携を調整<br>
+        ④ 倫理調整…治療方針などの難しい判断に関与<br>
+        ⑤ 教育…スタッフ指導・勉強会の企画など<br>
+        ⑥ 研究…看護の質向上のための実践研究`);
+      } else if (questionId === 'q2') {
+        showToseikunMessage(`正解！<br>そうなんだ。認定看護師は…<br><br>
+        🔹 特定の看護分野で「実践力」を高めたスペシャリスト<br>
+        🔹 経験を積んだ看護師が、認定教育課程を修了し、試験に合格して認定されるんだ<br>
+        🔹 現場で即戦力として「看護の質向上」を支える存在なんだって`);
+      } else if (questionId === 'q3') {
+        showToseikunMessage(`正解！<br>そうなんだ、専門・認定看護師にはケアの方法に不安があるとき連絡するといいよ。<br><br>
+        例えば…<br>
+        ・専門的な処置・観察のコツを知りたいとき<br>
+        ・新人にどう教えればいいか悩んだとき<br>
+        ・ご家族への説明が難しいと感じたとき<br>
+        などでも相談に乗ってくれるんだ`);
       }
-
     } else {
-      color = "red";
-
-      if (questionId === "q1") {
-        message = "❌ 残念…でもチャレンジは大切です！褥瘡は“乾燥”や“アレルギー”ではなく、圧迫やずれが原因で起きる皮膚や組織の障害なんです。";
-      } else if (questionId === "q2") {
-        message = "❌ おしい！でも落ち込まないでくださいね😊 ブレーデンスケールが正解で、患者さんの活動レベルや栄養状態などから褥瘡のリスクを評価します。";
-      } else if (questionId === "q3") {
-        message = "❌ 惜しい！冷却や点滴よりもまず、体位変換による圧抜きが褥瘡予防の基本です。";
-      }
+      feedback.innerHTML = `❌ ちょっと違うけど、次の調査もがんばって！`;
+      feedback.style.color = "#d84315";
     }
 
-    feedback.textContent = message;
-    feedback.style.color = color;
+    const current = document.querySelector('.container:not(.hidden)');
+    current.appendChild(feedback);
+    const nextBtn = current.querySelector('.next-btn');
+    if (nextBtn) nextBtn.classList.remove('hidden');
   }
 </script>
