@@ -1,4 +1,21 @@
 /* ベースの設定 */
+@keyframes nod {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotateX(10deg);
+  }
+  40% {
+    transform: rotateX(-8deg);
+  }
+  60% {
+    transform: rotateX(6deg);
+  }
+  80% {
+    transform: rotateX(-4deg);
+  }
+}
 body {
   font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
   background: #fffbe6;
@@ -146,4 +163,10 @@ button + button {
 .next-btn:hover {
   background-color: #ff1493;  /* ホバー時：濃いピンク */
   transform: scale(1.05);
+}
+
+.nod {
+  animation: nod 0.4s ease-in-out 5;  /* 0.4秒 × 5回 */
+  transform-origin: center bottom;
+  display: inline-block;
 }
