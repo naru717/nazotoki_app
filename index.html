@@ -309,10 +309,6 @@
 
   const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLScQr9B23e6CuPFflnEQDi7Rj8APVpUps4qmR2NuUYkPViABtw/formResponse';
 
-  const formData = new FormData();
-formData.append('entry.671897270', name);  // 名前
-formData.append('entry.278938549', dept);  // 所属
-formData.append('entry.691760735', job);   // 職種
 
   fetch(formUrl, {
     method: 'POST',
